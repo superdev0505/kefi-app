@@ -1,0 +1,121 @@
+import React from 'react';
+import {
+  StyleSheet,
+  Image,
+  View,
+  Dimensions,
+  StatusBar
+} from 'react-native';
+import {
+  RkText,
+  RkTheme
+} from 'react-native-ui-kitten'
+import {ProgressBar} from '../../components';
+import {
+  KittenTheme
+} from '../../config/theme';
+import {NavigationActions} from 'react-navigation';
+import {scale, scaleModerate, scaleVertical} from '../../utils/scale';
+
+let timeFrame = 500;
+
+export class SplashScreen extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      progress: 0
+    }
+  }
+
+  componentDidMount() {
+    StatusBar.setHidden(true, 'none');
+    RkTheme.setTheme(KittenTheme);
+
+    this.timer = setInterval(() => {
+      if (this.state.progress == 1) {
+        clearInterval(this.timer);
+        setTimeout(() => {
+          StatusBar.setHidden(false, 'slide');
+          let toHome = NavigationActions.reset({
+            index: 0,
+            actions: [NavigationActions.navigate({routeName: 'Home'})]
+          });
+          this.props.navigation.dispatch(toHome)
+        }, timeFrame);
+      } else {
+        let random = Math.random() * 0.5;
+        let progress = this.state.progress + random;
+        if (progress > 1) {
+          progress = 1;
+        }
+        this.setState({progress});
+      }
+    }, timeFrame)
+
+  }
+
+  render() {
+    let width = Dimensions.get('window').width;
+    return (
+      <View style={styles.container}>
+        <View>
+          <Image style={[styles.image, {width}]} source={require('../../assets/images/splashBack.png')}/>
+        </View>
+        <View style={styles.header}>
+          <Image style={[styles.logoImage, {width}]} source={require('../../assets/images/largeLogo.png')}/>
+        </View>
+        <ProgressBar
+          color={RkTheme.current.colors.accent}
+          style={styles.progress}
+          progress={this.state.progress} width={scale(320)}/>
+      </View>
+    )
+  }
+}
+
+let styles = StyleSheet.create({
+  container: {
+    backgroundColor: KittenTheme.colors.screen.base,
+    justifyContent: 'space-between',
+    flex: 1
+  },
+  header: {
+      paddingBottom: scaleVertical(10),
+      alignItems: 'center',
+      justifyContent: 'center',
+      flex: 1,
+      position: 'absolute',
+      top: 50,
+      zIndex: 2,
+      textAlign: 'center',
+  },
+  logoImage: {
+    height: scaleVertical(200),
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    resizeMode: 'contain',
+  },
+  image: {
+    resizeMode: 'cover',
+    height: scaleVertical(680),
+  },
+  text: {
+    alignItems: 'center'
+  },
+  hero: {
+    fontSize: 37,
+  },
+  appName: {
+    fontSize: 62,
+  },
+  progress: {
+    alignSelf: 'center',
+    marginBottom: 35,
+    backgroundColor: '#e5e5e5',
+    zIndex: 2,
+    position: 'absolute',
+    bottom: 20
+  }
+});
