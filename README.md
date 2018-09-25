@@ -1,3 +1,5 @@
+# kefi-app
+
 ## Key Features
 - More than 40 ready to use application screens. Currently includes:
   - App loader
@@ -42,4 +44,3 @@ Yes!  Visit [our homepage](http://akveo.com/) or simply leave us a message to [c
 
 Enjoy :metal:
 We're always happy to receive your feedback!
-# kefi-app
